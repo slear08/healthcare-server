@@ -10,8 +10,9 @@ export const createQueueController = async (
 ) => {
   try {
     const { _id } = req.user as UserInterface;
+    const purpose = req.body.purpose;
     const userId = _id;
-    const response = await createQueueService(userId);
+    const response = await createQueueService(userId, purpose);
 
     res.json({ message: response });
   } catch (error) {

@@ -24,9 +24,17 @@ const MedicalQueueSchema = new mongoose.Schema(
       enum: ['waiting', 'in-progress', 'completed'],
       default: 'waiting',
     },
+    purpose: {
+      type: String,
+      enum: ['checkup', 'medicine-request'],
+    },
     timeSchedule: {
       type: Date,
       default: Date.now,
+    },
+    deletedAt: {
+      type: Date,
+      default: null,
     },
   },
   { timestamps: true }
