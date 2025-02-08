@@ -13,7 +13,7 @@ const Routes = (app: Express) => {
   app.use('/api/auth', AuthRoutes);
 
   // FEATURES
-  app.use('/api/queue', PassportAuthMiddleware, MedicalQueueRoutes);
+  app.use('/api/queue', MedicalQueueRoutes);
   app.use('/api/reminder', PassportAuthMiddleware, MedicineReminderRoutes);
 };
 
