@@ -1,4 +1,6 @@
 import MedicalQueue from '../../models/medical_queue.model';
+import { HttpError } from '../../utils/http-error';
+import { queueValidatorUtil } from '../../utils/queue_validator/queue_validator.util';
 
 export const createQueueService = async (
   userId: string,
@@ -8,6 +10,10 @@ export const createQueueService = async (
 
   if (existingQueue) {
     return 'Queue entry already exists for this user';
+  }
+
+  if (!(await queueValidatorUtil())) {
+    throw new HttpError(400, 'Queue limit reached');
   }
 
   const queueEntry = new MedicalQueue({
