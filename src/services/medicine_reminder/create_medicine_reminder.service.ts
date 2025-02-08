@@ -13,7 +13,7 @@ export async function createMedicineReminderService(
     numberToTake,
     isEveryday,
     time,
-    reminderDate: isEveryday ? undefined : reminderDate,
+    reminderDate: isEveryday ? undefined : new Date(reminderDate as string),
     userId,
   });
 

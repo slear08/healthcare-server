@@ -26,7 +26,7 @@ export const AuthMiddleware = (
 
   const decoded = VerifyJWT(token);
 
-  if (decoded?.role == USER_TYPE.ADMIN) {
+  if (decoded?.role !== USER_TYPE.ADMIN) {
     return next(new HttpError(401, 'Unauthorized access'));
   }
 

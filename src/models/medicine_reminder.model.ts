@@ -4,8 +4,8 @@ export interface IMedicineReminder extends Document {
   name: string;
   numberToTake: number;
   isEveryday: boolean;
-  time: Date; // Time of day for the reminder
-  reminderDate?: Date; // Optional, only used if isEveryday is false
+  time: string; // Time of day for the reminder
+  reminderDate?: string; // Optional, only used if isEveryday is false
   userId: string; // User who set the reminder
 }
 
@@ -24,7 +24,7 @@ const MedicineReminderSchema = new mongoose.Schema(
       default: true,
     },
     time: {
-      type: Date,
+      type: String,
       required: true,
     },
     reminderDate: {
