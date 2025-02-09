@@ -1,10 +1,12 @@
 import { Express } from 'express';
 
+import { AuthMiddleware } from '../middlewares/auth/auth.middleware';
 import { PassportAuthMiddleware } from '../middlewares/auth/passport_auth.middleware';
 import AuthRoutes from './auth.routes';
 import MedicalQueueRoutes from './medical-queue.routes';
 import MedicineReminderRoutes from './medicine_reminder.routes';
 import PassportRoutes from './passport.routes';
+import UserRoutes from './user.routes';
 
 const Routes = (app: Express) => {
   // PASSPORT AUTHENTICATION
@@ -15,6 +17,7 @@ const Routes = (app: Express) => {
   // FEATURES
   app.use('/api/queue', MedicalQueueRoutes);
   app.use('/api/reminder', PassportAuthMiddleware, MedicineReminderRoutes);
+  app.use('/api/user', AuthMiddleware, UserRoutes);
 };
 
 export default Routes;
