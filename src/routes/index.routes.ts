@@ -3,7 +3,7 @@ import { Express } from 'express';
 import { AuthMiddleware } from '../middlewares/auth/auth.middleware';
 import { PassportAuthMiddleware } from '../middlewares/auth/passport_auth.middleware';
 import AuthRoutes from './auth.routes';
-import MedicalQueueRoutes from './medical-queue.routes';
+import MedicalQueueRoutes from './medical_queue.routes';
 import MedicineReminderRoutes from './medicine_reminder.routes';
 import PassportRoutes from './passport.routes';
 import UserRoutes from './user.routes';
