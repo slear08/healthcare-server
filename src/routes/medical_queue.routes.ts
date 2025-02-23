@@ -1,6 +1,7 @@
 import express from 'express';
 
 import {
+  cancelUserQueueStatusController,
   createQueueController,
   getActiveQueueByUserIdController,
   getQueueHistoryByUserController,
@@ -16,7 +17,7 @@ const router = express.Router();
 // USER
 router.get('/create', PassportAuthMiddleware, createQueueController);
 router.get(
-  '/user-list',
+  '/active-queue',
   PassportAuthMiddleware,
   getActiveQueueByUserIdController
 );
@@ -24,6 +25,11 @@ router.get(
   '/user/history-list',
   PassportAuthMiddleware,
   getQueueHistoryByUserController
+);
+router.put(
+  '/user/update/queue/:queueId',
+  PassportAuthMiddleware,
+  cancelUserQueueStatusController
 );
 
 // ADMIN

@@ -21,7 +21,7 @@ const MedicalQueueSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['waiting', 'in-progress', 'completed'],
+      enum: ['waiting', 'in-progress', 'completed', 'cancelled'],
       default: 'waiting',
     },
     purpose: {
