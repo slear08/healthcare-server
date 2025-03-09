@@ -3,10 +3,10 @@ import { HttpError } from '../../utils/http-error';
 
 export async function deleteMedicineReminderService(
   userId: string,
-  medicineReminderId: string
+  reminderId: string
 ) {
   const deletedMedicineReminder = await MedicineReminder.findOneAndDelete({
-    _id: medicineReminderId,
+    _id: reminderId,
     userId,
   });
 

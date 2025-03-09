@@ -9,11 +9,16 @@ export async function updateMedicineReminderController(
   next: NextFunction
 ) {
   try {
+    const { reminderId } = req.params;
     const { _id } = req.user as UserInterface;
     const userId = _id;
     const data = req.body;
 
-    const updatedReminder = await updateMedicineReminderService(userId, data);
+    const updatedReminder = await updateMedicineReminderService(
+      userId,
+      reminderId,
+      data
+    );
 
     res.json({ message: 'Reminder Updated', data: updatedReminder });
   } catch (error) {

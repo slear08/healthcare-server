@@ -15,7 +15,7 @@ import { PassportAuthMiddleware } from '../middlewares/auth/passport_auth.middle
 const router = express.Router();
 
 // USER
-router.get('/create', PassportAuthMiddleware, createQueueController);
+router.post('/create', PassportAuthMiddleware, createQueueController);
 router.get(
   '/active-queue',
   PassportAuthMiddleware,

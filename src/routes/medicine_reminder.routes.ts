@@ -10,8 +10,8 @@ import {
 const router = express.Router();
 
 router.post('/create', createMedicineReminderController);
-router.put('/create', updateMedicineReminderController);
-router.get('/update', getMedicineReminderListByUserIdController);
-router.delete('/delete', deleteMedicineReminderController);
+router.put('/update/:reminderId', updateMedicineReminderController);
+router.get('/list', getMedicineReminderListByUserIdController);
+router.delete('/delete/:reminderId', deleteMedicineReminderController);
 
 export default router;
