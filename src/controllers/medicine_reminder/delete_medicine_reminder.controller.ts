@@ -11,9 +11,9 @@ export async function deleteMedicineReminderController(
   try {
     const { _id } = req.user as UserInterface;
     const userId = _id;
-    const { medicineReminderId } = req.params;
+    const { reminderId } = req.params;
 
-    await deleteMedicineReminderService(userId, medicineReminderId);
+    await deleteMedicineReminderService(userId, reminderId);
 
     res.json({ message: 'Reminder Deleted' });
   } catch (error) {

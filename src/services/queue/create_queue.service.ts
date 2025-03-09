@@ -6,7 +6,10 @@ export const createQueueService = async (
   userId: string,
   purpose: 'checkup' | 'medicine-request'
 ) => {
-  const existingQueue = await MedicalQueue.findOne({ userId });
+  const existingQueue = await MedicalQueue.findOne({
+    userId,
+    status: 'waiting',
+  });
 
   if (existingQueue) {
     return 'Queue entry already exists for this user';
@@ -25,5 +28,8 @@ export const createQueueService = async (
 
   await queueEntry.save();
 
-  return 'Queue created';
+  return {
+    message: 'Queue created successfully',
+    queue: queueEntry,
+  };
 };

@@ -1,16 +1,18 @@
+import 'dotenv/config';
+import './passport/config/passport.config';
+
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import 'dotenv/config';
 import express, { NextFunction, Request, Response } from 'express';
-
-import { DatabaseConnection } from './config/database.config';
 import session from 'express-session';
 import passport from 'passport';
-import './passport/config/passport.config';
+
+import { DatabaseConnection } from './config/database.config';
 import { ErrorHandler } from './middlewares/errors';
+import Routes from './routes/index.routes';
 import { HttpError } from './utils/http-error';
 import log from './utils/logger';
-import Routes from './routes/index.routes';
+
 const app = express();
 const port = process.env.PORT || 3000;
 

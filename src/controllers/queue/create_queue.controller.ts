@@ -26,7 +26,7 @@ export const createQueueController = async (
 
     const response = await createQueueService(userId, purpose);
 
-    res.json({ message: response });
+    res.json(response);
   } catch (error) {
     next(error);
   }

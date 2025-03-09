@@ -5,6 +5,6 @@ export const GoogleCallback = (req: Request, res: Response) => {
   passport.authenticate('google', {
     failureRedirect: '/login',
   })(req, res, () => {
-    res.redirect('/api/queue/list');
+    res.redirect(process.env.CLIENT_URL!);
   });
 };
