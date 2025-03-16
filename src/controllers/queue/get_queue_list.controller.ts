@@ -10,18 +10,22 @@ export const getQueueListController = async (
   next: NextFunction
 ) => {
   try {
-    const { status, sort, page, limit } = req.query;
+    const { status, sort, page, limit, search, purpose } = req.query;
 
     const params = {
       status: typeof status === 'string' ? status : undefined,
       sort: typeof sort === 'string' ? sort : undefined,
+      search: typeof search === 'string' ? search : undefined,
       page: page ? Math.max(1, parseInt(page as string)) : 1,
+      purpose: typeof purpose === 'string' ? purpose : undefined,
       limit: limit ? Math.min(100, Math.max(1, parseInt(limit as string))) : 10,
     };
 
     if (
       params.status &&
-      !['waiting', 'in-progress', 'completed'].includes(params.status)
+      !['waiting', 'in-progress', 'completed', 'cancelled'].includes(
+        params.status
+      )
     ) {
       throw new HttpError(
         400,
