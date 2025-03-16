@@ -7,6 +7,7 @@ import DataAnalyticsRoutes from './data_analytics.routes';
 import MedicalQueueRoutes from './medical_queue.routes';
 import MedicineReminderRoutes from './medicine_reminder.routes';
 import PassportRoutes from './passport.routes';
+import QueueLimitRoutes from './queue.route';
 import UserRoutes from './user.routes';
 
 const Routes = (app: Express) => {
@@ -17,6 +18,7 @@ const Routes = (app: Express) => {
 
   // FEATURES
   app.use('/api/queue', MedicalQueueRoutes);
+  app.use('/api/queue-limit', QueueLimitRoutes);
   app.use('/api/reminder', PassportAuthMiddleware, MedicineReminderRoutes);
   app.use('/api/user', AuthMiddleware, UserRoutes);
   app.use('/api/data-analytics', AuthMiddleware, DataAnalyticsRoutes);

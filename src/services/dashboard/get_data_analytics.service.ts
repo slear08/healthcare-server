@@ -7,24 +7,27 @@ export const getDataAnalyticsService = async () => {
 
   const getWeeklyTrend = () => {
     const days = [];
-    const today = new Date().getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+
     for (let i = 6; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);
-      const dayOfWeek = date.getDay();
+      date.setHours(0, 0, 0, 0);
+
       days.push({
         day: date.toLocaleString('en-US', { weekday: 'long' }),
         date: date.toISOString().split('T')[0],
-        isFuture: dayOfWeek > today, // Mark future days
+        isFuture: date > now,
       });
     }
     return days;
   };
 
   const weeklyTrend = getWeeklyTrend();
-  const todayDate = new Date().toISOString().split('T')[0];
+  const todayDate = new Date();
+  todayDate.setHours(0, 0, 0, 0);
 
-  // Get new users count per day
   const newUsersWeekly = await User.aggregate([
     {
       $match: {
@@ -39,7 +42,6 @@ export const getDataAnalyticsService = async () => {
     },
   ]);
 
-  // Get queues count per day
   const totalQueuesWeekly = await MedicalQueue.aggregate([
     {
       $match: {
@@ -54,13 +56,11 @@ export const getDataAnalyticsService = async () => {
     },
   ]);
 
-  // Get total "waiting" queues for today
   const totalWaitingToday = await MedicalQueue.countDocuments({
     status: 'waiting',
-    createdAt: { $gte: new Date(todayDate) },
+    createdAt: { $gte: todayDate },
   });
 
-  // Get queue limit and status
   const queueLimitData = await MedicalQueueLimit.findOne().sort({
     createdAt: -1,
   });
@@ -69,13 +69,10 @@ export const getDataAnalyticsService = async () => {
     limit: queueLimitData?.limit || 0,
   };
 
-  // Format weekly trend data and set future days to null
   const formatWeeklyData = (dataArray: any[]) => {
     return weeklyTrend.map((day) => ({
       name: day.day,
-      value: day.isFuture
-        ? null
-        : dataArray.find((d) => d._id === day.date)?.count || 0,
+      value: dataArray.find((d) => d._id === day.date)?.count || 0,
     }));
   };
 
