@@ -34,6 +34,7 @@ passport.use(
             name: profile.displayName,
             email: profile.emails?.[0]?.value,
             role: USER_TYPE.USER,
+            isVerified: false,
             profile: profile.photos?.[0]?.value,
           });
           await newUser.save();

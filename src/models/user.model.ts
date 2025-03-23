@@ -9,6 +9,8 @@ interface UserInterface extends Document {
   role: USER_TYPE.ADMIN | USER_TYPE.USER;
   profile: string;
   password?: string;
+  mobileNumber?: string;
+  isVerified?: boolean;
   deletedAt?: Date | null;
 }
 
@@ -55,6 +57,14 @@ const UserSchema = new Schema<UserInterface>(
         },
         message: 'Password is required for admin users',
       },
+    },
+    mobileNumber: {
+      type: String,
+      trim: true,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
     },
     deletedAt: {
       type: Date,

@@ -11,15 +11,19 @@ export async function updateUserQueueStatusController(
   try {
     const { userId, queueId } = req.params;
     const { status } = req.body;
+    const io = req.app.get('io');
 
-    if (!['waiting', 'in-progress', 'completed'].includes(status)) {
+    if (
+      !['waiting', 'in-progress', 'completed', 'cancelled'].includes(status)
+    ) {
       throw new HttpError(400, 'Invalid status value');
     }
 
     const updatedQueue = await updateUserQueueStatusService(
       userId,
       queueId,
-      status
+      status,
+      io
     );
 
     res.json({ message: 'Queue status updated', data: updatedQueue });

@@ -1,5 +1,6 @@
 import { Express } from 'express';
 
+import { verifyUserController } from '../controllers/user/verify_user.controller';
 import { AuthMiddleware } from '../middlewares/auth/auth.middleware';
 import { PassportAuthMiddleware } from '../middlewares/auth/passport_auth.middleware';
 import AuthRoutes from './auth.routes';
@@ -18,6 +19,7 @@ const Routes = (app: Express) => {
 
   // FEATURES
   app.use('/api/queue', MedicalQueueRoutes);
+  app.put('/api/user/verify', PassportAuthMiddleware, verifyUserController);
   app.use('/api/queue-limit', QueueLimitRoutes);
   app.use('/api/reminder', PassportAuthMiddleware, MedicineReminderRoutes);
   app.use('/api/user', AuthMiddleware, UserRoutes);
