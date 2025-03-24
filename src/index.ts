@@ -12,6 +12,8 @@ import { Server } from 'socket.io';
 import { DatabaseConnection } from './config/database.config';
 import { ErrorHandler } from './middlewares/errors';
 import Routes from './routes/index.routes';
+import notificationRoutes from './routes/notification.routes';
+import { startCronJob } from './services/cron.service';
 import { HttpError } from './utils/http-error';
 import log from './utils/logger';
 
@@ -85,6 +87,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 Routes(app);
 
+// Add notification routes
+app.use('/api/notifications', notificationRoutes);
+
+// Start the server
+httpServer.listen(port, async () => {
+  log.info(`Server is running on http://localhost:${port}`);
+  await DatabaseConnection(process.env.MONGO_URI as string);
+  // Start the cron job after server and database are initialized
+  startCronJob();
+});
+
 // Fallback route for handling 404 (Not Found) errors
 app.use((req: Request, res: Response, next: NextFunction) => {
   const error = new HttpError(404, 'Resource Not Found');
@@ -93,9 +106,3 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 // Error handling middleware
 app.use(ErrorHandler);
-
-// Start the server
-httpServer.listen(port, async () => {
-  log.info(`Server is running on http://localhost:${port}`);
-  await DatabaseConnection(process.env.MONGO_URI as string);
-});
