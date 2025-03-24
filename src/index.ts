@@ -5,24 +5,58 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import session from 'express-session';
+import { createServer } from 'http';
 import passport from 'passport';
+import { Server } from 'socket.io';
 
 import { DatabaseConnection } from './config/database.config';
 import { ErrorHandler } from './middlewares/errors';
 import Routes from './routes/index.routes';
+import notificationRoutes from './routes/notification.routes';
+import { startCronJob } from './services/cron.service';
 import { HttpError } from './utils/http-error';
 import log from './utils/logger';
 
 const app = express();
+const httpServer = createServer(app);
+
+// Socket.IO setup with CORS
+const io = new Server(httpServer, {
+  cors: {
+    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  },
+  transports: ['websocket', 'polling'],
+});
+
 const port = process.env.PORT || 3000;
+
+// Socket.IO connection handling
+io.on('connection', (socket) => {
+  log.info('Client connected:', socket.id);
+
+  socket.on('disconnect', () => {
+    log.info('Client disconnected:', socket.id);
+  });
+
+  // Handle any errors
+  socket.on('error', (error) => {
+    log.error('Socket error:', error);
+  });
+});
+
+// Make io accessible to our routes
+app.set('io', io);
 
 // CORS
 app.use(
   cors({
-    origin: 'http://localhost:4000', // Specify allowed origin
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-    credentials: true, // Enable credentials (cookies, authorization headers, etc.)
+    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
   })
 );
 
@@ -53,6 +87,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 Routes(app);
 
+// Add notification routes
+app.use('/api/notifications', notificationRoutes);
+
+// Start the server
+httpServer.listen(port, async () => {
+  log.info(`Server is running on http://localhost:${port}`);
+  await DatabaseConnection(process.env.MONGO_URI as string);
+  // Start the cron job after server and database are initialized
+  startCronJob();
+});
+
 // Fallback route for handling 404 (Not Found) errors
 app.use((req: Request, res: Response, next: NextFunction) => {
   const error = new HttpError(404, 'Resource Not Found');
@@ -61,9 +106,3 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 // Error handling middleware
 app.use(ErrorHandler);
-
-// Start the server
-app.listen(port, async () => {
-  log.info(`Server is running on http://localhost:${port}`);
-  await DatabaseConnection(process.env.MONGO_URI as string);
-});

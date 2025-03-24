@@ -12,8 +12,13 @@ export async function cancelUserQueueStatusController(
     const { queueId } = req.params;
     const { _id } = req.user as UserInterface;
     const userId = _id;
+    const io = req.app.get('io');
 
-    const updatedQueue = await cancelUserQueueStatusService(userId, queueId);
+    const updatedQueue = await cancelUserQueueStatusService(
+      userId,
+      queueId,
+      io
+    );
 
     res.json({ message: 'Queue status updated', data: updatedQueue });
   } catch (error) {

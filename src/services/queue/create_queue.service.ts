@@ -1,10 +1,12 @@
 import MedicalQueue from '../../models/medical_queue.model';
 import { HttpError } from '../../utils/http-error';
+import log from '../../utils/logger';
 import { queueValidatorUtil } from '../../utils/queue_validator/queue_validator.util';
 
 export const createQueueService = async (
   userId: string,
-  purpose: 'checkup' | 'medicine-request'
+  purpose: 'checkup' | 'medicine-request',
+  io: any // Socket.IO instance
 ) => {
   const existingQueue = await MedicalQueue.findOne({
     userId,
@@ -27,6 +29,20 @@ export const createQueueService = async (
   });
 
   await queueEntry.save();
+
+  try {
+    // Emit socket event for new queue entry
+    io.emit('newQueueEntry', {
+      queueId: queueEntry._id,
+      userId,
+      purpose,
+      timeSchedule: queueEntry.timeSchedule,
+      status: queueEntry.status,
+    });
+    log.info(`Emitted newQueueEntry event for queue ${queueEntry._id}`);
+  } catch (error) {
+    log.error('Error emitting newQueueEntry event:', error);
+  }
 
   return {
     message: 'Queue created successfully',

@@ -14,6 +14,7 @@ export const createQueueController = async (
     const { _id } = req.user as UserInterface;
     const purpose = req.body.purpose;
     const userId = _id;
+    const io = req.app.get('io');
 
     const queueLimitStatus = await getQueueLimitHelper();
 
@@ -24,7 +25,7 @@ export const createQueueController = async (
       );
     }
 
-    const response = await createQueueService(userId, purpose);
+    const response = await createQueueService(userId, purpose, io);
 
     res.json(response);
   } catch (error) {
