@@ -4,6 +4,7 @@ import { PushSubscription } from 'web-push';
 import MedicineReminder from '../models/medicine_reminder.model';
 import PushSubscriptionModel from '../models/push_subscription.model';
 import log from '../utils/logger';
+import { SendSMSUtil } from '../utils/sms';
 import { sendPushNotification } from './webPush.service';
 
 export const addUserSubscription = async (
@@ -91,6 +92,7 @@ const checkMedicineReminders = async () => {
           subscriptionDoc.subscription,
           reminder
         );
+        await SendSMSUtil(reminder.userId, reminder.name);
         if (sent) {
           log.info(`Successfully sent notification for: ${reminder.name}`);
         } else {
