@@ -61,10 +61,10 @@ export const getDataAnalyticsService = async () => {
     createdAt: { $gte: todayDate },
   });
 
-  const queueLimitData = await MedicalQueueLimit.findOne(
-    {},
-    { sort: { createdAt: -1 } }
-  );
+  const queueLimitData = await MedicalQueueLimit.findOne().sort({
+    createdAt: -1,
+  });
+
   const queueLimit = {
     status: queueLimitData?.status || 'OFF',
     limit: queueLimitData?.limit || 0,

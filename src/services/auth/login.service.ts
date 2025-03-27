@@ -12,7 +12,7 @@ export const loginUserService = async (email: string, password: string) => {
     throw new HttpError(400, 'Account does not exist');
   }
 
-  const isMatch = bcrypt.compare(password, user.password!);
+  const isMatch = await bcrypt.compare(password, user.password!);
   if (!isMatch) {
     throw new HttpError(400, 'Invalid email or password');
   }

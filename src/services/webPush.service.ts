@@ -28,7 +28,6 @@ export const sendPushNotification = async (
         reminderId: reminder._id,
       },
     });
-
     await webpush.sendNotification(subscription, payload);
     return true;
   } catch (error) {
