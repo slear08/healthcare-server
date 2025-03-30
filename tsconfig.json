@@ -9,6 +9,13 @@
     "outDir": "./dist",
     "types": ["jest", "node"]
   },
-  "include": ["src/**/*", "src/@types"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*", "src/@types", "eslint.config.mjs", "jest.config.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "eslint.config.mjs",
+    "jest.config.ts"
+  ]
 }
