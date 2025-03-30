@@ -8,7 +8,7 @@ import { JWTPayload } from './interface/jwt_payload.interface';
 
 export const SignRefreshToken = (payload: JWTPayload): string => {
   const signOptions: SignOptions = {
-    expiresIn: REFRESH_EXPIRES_IN,
+    expiresIn: REFRESH_EXPIRES_IN as jwt.SignOptions['expiresIn'],
   };
   return jwt.sign(payload, REFRESH_SECRET, signOptions);
 };

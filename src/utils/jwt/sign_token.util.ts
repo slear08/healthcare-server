@@ -8,8 +8,8 @@ export const SignJWT = (
   options: SignOptions = {}
 ): string => {
   const signOptions: SignOptions = {
-    expiresIn: JWT_EXPIRES_IN,
     ...options,
+    expiresIn: JWT_EXPIRES_IN as jwt.SignOptions['expiresIn'],
   };
   return jwt.sign(payload, JWT_SECRET, signOptions);
 };
