@@ -13,7 +13,8 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-      callbackURL: '/api/auth/google/callback',
+      callbackURL:
+        'https://healthcare-server-pa9l.onrender.com/api/auth/google/callback',
       scope: ['profile', 'email'],
       passReqToCallback: true,
     },
@@ -43,9 +44,6 @@ passport.use(
           return cb(null, newUser);
         }
       } catch (error) {
-        console.log('==========================================');
-        console.log('ERROR', error);
-        console.log('==========================================');
         return cb(error as Error);
       }
     }
