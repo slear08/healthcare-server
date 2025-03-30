@@ -7,6 +7,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import session from 'express-session';
 import { createServer } from 'http';
 import passport from 'passport';
+import path from 'path';
 import { Server } from 'socket.io';
 
 import { DatabaseConnection } from './config/database.config';
@@ -23,7 +24,10 @@ const httpServer = createServer(app);
 // Socket.IO setup with CORS
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin:
+      process.env.NODE_ENV === 'production'
+        ? false // Disable CORS in production since we're serving from the same origin
+        : process.env.CLIENT_URL || 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -53,7 +57,10 @@ app.set('io', io);
 // CORS
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin:
+      process.env.NODE_ENV === 'production'
+        ? false // Disable CORS in production since we're serving from the same origin
+        : process.env.CLIENT_URL || 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -85,10 +92,21 @@ app.use(express.json());
 
 // Middleware to parse URL-encoded requests (for form data)
 app.use(express.urlencoded({ extended: true }));
-Routes(app);
 
-// Add notification routes
+// API Routes
+Routes(app);
 app.use('/api/notifications', notificationRoutes);
+
+// Serve static files from the React build directory in production
+if (process.env.NODE_ENV === 'production') {
+  const buildPath = path.join(__dirname, '../app/dist');
+  app.use(express.static(buildPath));
+
+  // Handle React routing, return all requests to React app
+  app.get('*', (req: Request, res: Response) => {
+    res.sendFile(path.join(buildPath, 'index.html'));
+  });
+}
 
 // Start the server
 httpServer.listen(port, async () => {
