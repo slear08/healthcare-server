@@ -7,8 +7,9 @@ export const SignJWT = (
   payload: JWTPayload,
   options: SignOptions = {}
 ): string => {
-  return jwt.sign(payload, JWT_SECRET as jwt.Secret, {
+  const signOptions: SignOptions = {
     expiresIn: JWT_EXPIRES_IN,
     ...options,
-  });
+  };
+  return jwt.sign(payload, JWT_SECRET, signOptions);
 };

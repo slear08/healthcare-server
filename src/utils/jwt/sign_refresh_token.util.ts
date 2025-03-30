@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 
 import {
   REFRESH_EXPIRES_IN,
@@ -7,7 +7,8 @@ import {
 import { JWTPayload } from './interface/jwt_payload.interface';
 
 export const SignRefreshToken = (payload: JWTPayload): string => {
-  return jwt.sign(payload, REFRESH_SECRET as jwt.Secret, {
+  const signOptions: SignOptions = {
     expiresIn: REFRESH_EXPIRES_IN,
-  });
+  };
+  return jwt.sign(payload, REFRESH_SECRET, signOptions);
 };
