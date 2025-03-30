@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteMedicineReminderController = exports.updateMedicineReminderController = exports.getMedicineReminderListByUserIdController = exports.createMedicineReminderController = void 0;
+var create_medicine_reminder_controller_1 = require("./create_medicine_reminder.controller");
+Object.defineProperty(exports, "createMedicineReminderController", { enumerable: true, get: function () { return create_medicine_reminder_controller_1.createMedicineReminderController; } });
+var get_medicine_reminder_list_by_user_id_controller_1 = require("./get_medicine_reminder_list_by_user_id.controller");
+Object.defineProperty(exports, "getMedicineReminderListByUserIdController", { enumerable: true, get: function () { return get_medicine_reminder_list_by_user_id_controller_1.getMedicineReminderListByUserIdController; } });
+var update_medicine_reminder_controller_1 = require("./update_medicine_reminder.controller");
+Object.defineProperty(exports, "updateMedicineReminderController", { enumerable: true, get: function () { return update_medicine_reminder_controller_1.updateMedicineReminderController; } });
+var delete_medicine_reminder_controller_1 = require("./delete_medicine_reminder.controller");
+Object.defineProperty(exports, "deleteMedicineReminderController", { enumerable: true, get: function () { return delete_medicine_reminder_controller_1.deleteMedicineReminderController; } });
