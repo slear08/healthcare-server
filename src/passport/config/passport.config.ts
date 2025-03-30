@@ -43,6 +43,9 @@ passport.use(
           return cb(null, newUser);
         }
       } catch (error) {
+        console.log('==========================================');
+        console.log('ERROR', error);
+        console.log('==========================================');
         return cb(error as Error);
       }
     }

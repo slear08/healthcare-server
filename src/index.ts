@@ -23,10 +23,7 @@ const httpServer = createServer(app);
 // Socket.IO setup with CORS
 const io = new Server(httpServer, {
   cors: {
-    origin:
-      process.env.NODE_ENV === 'production'
-        ? false // Disable CORS in production since we're serving from the same origin
-        : process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: process.env.CLIENT_URL || 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -70,7 +67,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === 'production',
+      secure: true,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     },
   })
