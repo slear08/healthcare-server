@@ -60,6 +60,7 @@ app.use(
   })
 );
 // Session configuration
+app.set('trust proxy', 1);
 app.use(
   session({
     secret: process.env.SESSION_SECRET || 'test',
@@ -68,7 +69,7 @@ app.use(
     cookie: {
       secure: true,
       sameSite: 'none',
-      domain: 'healthcare-server-pa9l.onrender.com',
+      maxAge: 24 * 60 * 60 * 1000,
     },
   })
 );
