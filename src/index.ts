@@ -6,6 +6,7 @@ import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import session from 'express-session';
 import { createServer } from 'http';
+import MemoryStore from 'memorystore';
 import passport from 'passport';
 import { Server } from 'socket.io';
 
@@ -63,9 +64,12 @@ app.use(
 // Session configuration
 app.use(
   session({
-    secret: 'test',
+    secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: false,
     saveUninitialized: false,
+    store: new (MemoryStore(session))({
+      checkPeriod: 24 * 60 * 60 * 1000, // Automatically remove expired sessions every 24 hours
+    }),
     cookie: {
       secure: true,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
