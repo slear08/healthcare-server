@@ -59,16 +59,16 @@ app.use(
     credentials: true,
   })
 );
-
 // Session configuration
 app.use(
   session({
-    secret: 'test',
+    secret: process.env.SESSION_SECRET || 'test',
     resave: false,
     saveUninitialized: false,
     cookie: {
       secure: true,
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      sameSite: 'none',
+      domain: 'healthcare-server-pa9l.onrender.com',
     },
   })
 );
