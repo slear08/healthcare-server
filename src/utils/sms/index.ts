@@ -23,9 +23,11 @@ export async function SendSMSUtil(userId: string, message: string) {
       }),
     });
 
-    await response.json();
+    const data = await response.json();
+    console.log(data);
   } catch (error) {
     log.error('Error sending SMS:', error);
+    console.log(error);
     throw error;
   }
 }
