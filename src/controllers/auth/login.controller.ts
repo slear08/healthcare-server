@@ -18,14 +18,14 @@ export const loginAdminController = async (
     res.cookie('token', result.auth.token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'staging',
-      sameSite: 'none',
+      sameSite: 'lax',
       maxAge,
     });
 
     res.cookie('refreshToken', result.auth.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'staging',
-      sameSite: 'none',
+      sameSite: 'lax',
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
